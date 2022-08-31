@@ -51,7 +51,8 @@ query_staff = """
 
 
 query_film = """
-            SELECT 
+            SELECT
+                f.film_id,
                 f.title, 
                 f.description, 
                 f.release_year,

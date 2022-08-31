@@ -10,7 +10,8 @@ customer_data = {"file_name" : PATH_LOG+"customer_extract.csv",
                  "value_to_fill" : ["unknown"]} 
 
 rental_data = {"file_name" : PATH_LOG+"rental_extract.csv", 
-               "task" : ["parse_date"]}
+               "task" : ["parse_date"],
+               "columns" : ["rental_date"]}
 
 
 # clean customer data
@@ -21,8 +22,9 @@ data_customer = clean_data(customer_data["file_name"],
 
 save_tocsv(data_customer, "customer", "transform")
 
-data_rental = clean_data(customer_data["file_name"], 
-                           list_task=customer_data["task"], 
-                           list_column_to_clean=customer_data["columns"])
+# clean rental data
+data_rental = clean_data(rental_data["file_name"], 
+                           list_task=rental_data["task"], 
+                          list_column_to_clean=rental_data["columns"])
 
-save_tocsv(data_customer, "rental", "transform")
+save_tocsv(data_rental, "rental", "transform")

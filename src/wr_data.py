@@ -34,5 +34,10 @@ def clean_data(filename, list_task=None, list_column_to_clean=None, list_value_t
 
         elif list_task[i] == "handle_nan":
             df[list_column_to_clean[i]].fillna(list_column_to_clean[i], inplace=True)
-        
     return df
+
+def insert_data(filename, con, table_name):
+    df = read_data(f"log_data/{filename}")
+    df.head(0).to_sql(name=table_name, con=con,if_exists="replace", index=False)
+    df.to_sql(name=table_name, con=con,if_exists="append", index=False)
+    print("data berhasil di insert")

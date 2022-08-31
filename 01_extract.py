@@ -1,5 +1,5 @@
 from src.sql_con import *
-from src.query import *
+from query.query_read import *
 from src.wr_data import *
 
 HOST = "localhost"

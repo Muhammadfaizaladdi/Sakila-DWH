@@ -31,3 +31,10 @@ def create_db(host_name, user_name, user_password, db_name):
         print(f"{db_name} berhasil dibuat.")
     except exc.SQLAlchemyError as err:
         print(f"Error: {err}")
+        
+        
+def execute_multi_query(conn, query):
+    try:
+        conn.execute(query)
+    except exc.SQLAlchemyError as err:
+        print(f"Error: {err}")
