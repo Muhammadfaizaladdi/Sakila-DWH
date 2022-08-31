@@ -1,11 +1,15 @@
-install requirements
-connect to mysql server
-extract data
+# Sakila Datawarehouse Project
+
+### Step:
+1. install requirements
+2. connect to mysql server
+3. extract data
     - dim customer
     - dim store
     - dim staff
     - dim film
     - dim date
     - fact rent
-
-validate and transform data
+4. validate and transform data
+5. Create dim and fact table
+6. Load Data Into database
