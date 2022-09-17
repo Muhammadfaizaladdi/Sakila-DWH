@@ -2,11 +2,16 @@ from src.wr_data import insert_data
 from src.sql_con import create_db_connection
 from query.query_relasi import *
 from src.sql_con import execute_multi_query
+from src.yaml_loader import yaml_loader
 
-host="localhost"
-user="root"
-password="RumahMakan02"
-db="sakila_dwh"
+file_path = "query/sql_params.yaml"
+
+mysql_params = yaml_loader(file_path)
+
+host=mysql_params["host"]
+user=mysql_params["user"]
+password=mysql_params["password"]
+db=mysql_params["db"]
 
 data_to_insert = {
                     "customer":{"filename" : "customer_transform.csv",
