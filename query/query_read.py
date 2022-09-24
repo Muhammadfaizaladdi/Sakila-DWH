@@ -1,6 +1,7 @@
-query_cust = """select 
+query_cust = """SELECT 
                     c.customer_id,
                     CONCAT(c.first_name, " ", c.last_name) full_name,
+                    c.email,
                     IF(c.active=1, "Yes", "No") is_active,
                     IFNULL(a.address, a.address2) address,
                     a.district,
@@ -16,15 +17,24 @@ query_cust = """select
                         USING(country_id);
                 """
 
+query_date = """ SELECT
+                    DISTINCT(DATE_FORMAT(payment_date, '%%Y%%m%%d')) as date_id,
+                    DATE_FORMAT(payment_date, '%%Y-%%m-%%d') as date,
+                    EXTRACT(year FROM payment_date) as year,
+                    EXTRACT(quarter FROM payment_date) as quarter,
+                    EXTRACT(month FROM payment_date) as month,
+                    EXTRACT(day FROM payment_date) as day,
+                    EXTRACT(week FROM payment_date) as week
+                FROM payment;
+                """
 
 query_store = """
-                select 
+                SELECT 
                     s.store_id, 
                     a.address store_address, 
                     a.district store_district, 
                     ci.city store_city, 
                     co.country store_country,
-                    s.manager_staff_id store_manager_id,
                     CONCAT(st.first_name, " ", st.last_name) store_manager_name
                 FROM store s
                     JOIN address a
@@ -38,18 +48,6 @@ query_store = """
                 """
 
 
-query_staff = """
-                SELECT 
-                    st.staff_id, 
-                    CONCAT(st.first_name, " ", st.last_name) staff_name,
-                    s.store_id staff_store_id,
-                    IF(st.active=1, "Yes", "No") is_active
-                from staff st
-                    JOIN store s
-                        ON s.manager_staff_id = st.staff_id;
-              """
-
-
 query_film = """
             SELECT
                 f.film_id,
@@ -57,8 +55,6 @@ query_film = """
                 f.description, 
                 f.release_year,
                 l.name language,
-                f.rental_duration,
-                f.rental_rate,
                 f.length film_duration,
                 f.replacement_cost,
                 f.rating,
@@ -69,22 +65,20 @@ query_film = """
                 JOIN film_category fc
                     USING(film_id)
                 JOIN category c
-                    USING(category_id)
+                    USING(category_id);
                 """
 
 
-query_rental = """
-                SELECT 
-                    r.customer_id,
-                    r.staff_id,
+query_sales = """SELECT 
+					p.payment_id,
+                    DATE_FORMAT(p.payment_date, '%%Y%%m%%d') as date_id,
+                    p.customer_id,
                     i.store_id,
                     i.film_id,
-                    r.rental_date,
-                    DATEDIFF(r.return_date, r.rental_date) rent_duration,
-                    p.amount
-                FROM rental r
-                    JOIN inventory i
-                        USING(inventory_id)
-                    JOIN payment p
+                    p.amount sales_amount
+                FROM payment p
+                    JOIN rental r
                         USING(rental_id)
+					JOIN inventory i
+						USING(inventory_id);
                 """

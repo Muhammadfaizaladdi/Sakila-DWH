@@ -12,15 +12,15 @@ alter_store= """
                 add primary key (store_id); 
              """
 
-alter_staff= """
-                alter table staff_dim
-                add primary key (staff_id); 
+alter_date= """
+                alter table date_dim
+                add primary key (date_id); 
              """
 
-alter_rental= """
-            ALTER TABLE rental_fact
+alter_sales= """
+            ALTER TABLE fact_sales
             ADD FOREIGN KEY (customer_id) REFERENCES customer_dim(customer_id),
             ADD FOREIGN KEY (film_id) REFERENCES film_dim(film_id),
             ADD FOREIGN KEY (store_id) REFERENCES store_dim(store_id),
-            ADD FOREIGN KEY (staff_id) REFERENCES staff_dim(staff_id);
+            ADD FOREIGN KEY (date_id) REFERENCES date_dim(date_id);
              """

@@ -20,34 +20,34 @@ PATH_LOG_DATA = "log_data/"
 ## create connection to mysql db
 con = create_db_connection(HOST, USER, PASSWORD, DB_EXTRACT)
 
+## load Date Data
+date_dim = read_query(con, query_date)
+
 ## load Customer Data
 customer_dim = read_query(con, query_cust)
 
 ## load Store Data
 store_dim = read_query(con, query_store)
 
-## load Staff Data
-staff_dim = read_query(con, query_staff)
-
 ## load Film Data
 film_dim = read_query(con, query_film)
 
 ## load Rental Data
-rental_fact = read_query(con, query_rental)
+fact_sales = read_query(con, query_sales)
 
 ## file_name
 cust_filename = "customer"
 store_filename = "store"
-staff_filename = "staff"
+date_filename = "date"
 film_filename = "film"
-rental_filename = "rental"
+sales_filename = "sales"
 
 ## Save the Data
 save_tocsv(customer_dim, cust_filename, stage="extract")
 save_tocsv(store_dim, store_filename, stage="extract")
-save_tocsv(staff_dim, staff_filename, stage="extract")
+save_tocsv(date_dim, date_filename, stage="extract")
 save_tocsv(film_dim, film_filename, stage="extract")
-save_tocsv(rental_fact, rental_filename, stage="extract")
+save_tocsv(fact_sales, sales_filename, stage="extract")
 print("extract data successfull")
 
 # Transform Data
@@ -57,10 +57,6 @@ customer_data = {"file_name" : PATH_LOG_DATA+"customer_extract.csv",
                  "columns" : ["district", "valid_from"],
                  "value_to_fill" : ["unknown"]} 
 
-rental_data = {"file_name" : PATH_LOG_DATA+"rental_extract.csv", 
-               "task" : ["parse_date"],
-               "columns" : ["rental_date"]}
-
 
 ## clean customer data
 data_customer = clean_data(customer_data["file_name"], 
@@ -68,13 +64,6 @@ data_customer = clean_data(customer_data["file_name"],
                            list_column_to_clean=customer_data["columns"], 
                            list_value_to_fill=customer_data["value_to_fill"])
 save_tocsv(data_customer, "customer", "transform")
-
-## clean rental data
-data_rental = clean_data(rental_data["file_name"], 
-                           list_task=rental_data["task"], 
-                          list_column_to_clean=rental_data["columns"])
-save_tocsv(data_rental, "rental", "transform")
-print("Transform data successfull")
 
 # Load Data
 ## Create Connection to new database 
@@ -87,14 +76,14 @@ data_to_insert = {
                     "film":{"filename" : "film_extract.csv",
                               "table_name" : "film_dim"
                              },
-                    "staff":{"filename" : "staff_extract.csv",
-                              "table_name" : "staff_dim"
+                    "date":{"filename" : "date_extract.csv",
+                              "table_name" : "date_dim"
                              },
                     "store":{"filename" : "store_extract.csv",
                               "table_name" : "store_dim"
                              },
-                    "rental":{"filename" : "rental_transform.csv",
-                              "table_name" : "rental_fact"
+                    "sales":{"filename" : "sales_extract.csv",
+                              "table_name" : "fact_sales"
                              }
                 }
 
@@ -103,7 +92,7 @@ for data, value in data_to_insert.items():
     insert_data(value["filename"], con, value["table_name"])
     
 
-list_query = [alter_cust, alter_film, alter_store, alter_staff, alter_rental]
+list_query = [alter_cust, alter_film, alter_store, alter_date, alter_sales]
 
 ## Creata table relation
 for query in list_query:
