@@ -1,6 +1,8 @@
 # Sakila Datawarehouse Project
+Repository ini berisi program untuk melakukan ETL pada database rental dvd sakila. Untuk dapat menjalankan program ini dapat mengikuti langka
 
-### Step:
+
+## Step:
 1. install requirements
 2. connect to mysql server
 3. extract data
