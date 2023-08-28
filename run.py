@@ -1,7 +1,7 @@
-from src.sql_con import *
-from src.wr_data import *
-from query.query_read import *
-from query.query_relasi import *
+import src.sql_con as sc
+import src.wr_data as wd
+import query.query_read as qrd
+import query.query_relasi as qrl
 from src.yaml_loader import yaml_loader
 from sqlalchemy import text
 
@@ -22,22 +22,22 @@ PATH_LOG_DATA = "log_data/"
 
 # Extract Data
 ## create connection to mysql db
-con = create_db_connection(HOST, USER, PASSWORD, DB_EXTRACT)
+con = sc.create_db_connection(HOST, USER, PASSWORD, DB_EXTRACT)
 
 ## load Date Data
-date_dim = read_query(con, text(query_date))
+date_dim = sc.read_query(con, text(qrd.query_date))
 
 ## load Customer Data
-customer_dim = read_query(con, text(query_cust))
+customer_dim = sc.read_query(con, text(qrd.query_cust))
 
 ## load Store Data
-store_dim = read_query(con, text(query_store))
+store_dim = sc.read_query(con, text(qrd.query_store))
 
 ## load Film Data
-film_dim = read_query(con, text(query_film))
+film_dim = sc.read_query(con, text(qrd.query_film))
 
 ## load Rental Data
-fact_sales = read_query(con, text(query_sales))
+fact_sales = sc.read_query(con, text(qrd.query_sales))
 
 ## file_name
 cust_filename = "customer"
@@ -47,11 +47,11 @@ film_filename = "film"
 sales_filename = "sales"
 
 ## Save the Data
-save_tocsv(customer_dim, cust_filename, stage="extract")
-save_tocsv(store_dim, store_filename, stage="extract")
-save_tocsv(date_dim, date_filename, stage="extract")
-save_tocsv(film_dim, film_filename, stage="extract")
-save_tocsv(fact_sales, sales_filename, stage="extract")
+wd.save_tocsv(customer_dim, cust_filename, stage="extract")
+wd.save_tocsv(store_dim, store_filename, stage="extract")
+wd.save_tocsv(date_dim, date_filename, stage="extract")
+wd.save_tocsv(film_dim, film_filename, stage="extract")
+wd.save_tocsv(fact_sales, sales_filename, stage="extract")
 print("extract data successfull")
 
 # Transform Data
@@ -63,15 +63,15 @@ customer_data = {"file_name" : PATH_LOG_DATA+"customer_extract.csv",
 
 
 ## clean customer data
-data_customer = clean_data(customer_data["file_name"], 
+data_customer = wd.clean_data(customer_data["file_name"], 
                            list_task=customer_data["task"], 
                            list_column_to_clean=customer_data["columns"], 
                            list_value_to_fill=customer_data["value_to_fill"])
-save_tocsv(data_customer, "customer", "transform")
+wd.save_tocsv(data_customer, "customer", "transform")
 
 # Load Data
 ## Create Connection to new database 
-con = create_db_connection(HOST, USER, PASSWORD, DB_LOAD)
+con = sc.create_db_connection(HOST, USER, PASSWORD, DB_LOAD)
 ## Params to load data
 data_to_insert = {
                     "customer":{"filename" : "customer_transform.csv",
@@ -93,12 +93,18 @@ data_to_insert = {
 
 ## Load Data to Database with new schema
 for data, value in data_to_insert.items():
-    insert_data(value["filename"], con, value["table_name"])
+    wd.insert_data(value["filename"], con, value["table_name"])
     
 
-list_query = [alter_cust, alter_film, alter_store, alter_date_type, alter_date, alter_date_sales_type, alter_sales]
+list_query = [qrl.alter_cust, 
+              qrl.alter_film, 
+              qrl.alter_store, 
+              qrl.alter_date_type, 
+              qrl.alter_date, 
+              qrl.alter_date_sales_type, 
+              qrl.alter_sales]
 
 ## Creata table relation
 for query in list_query:
-    execute_multi_query(con, text(query))
+    sc.execute_multi_query(con, text(query))
 print("Load data success")
