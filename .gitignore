@@ -1,0 +1,5 @@
+log_data/
+sakila_env/
+query/sql_params.yml
+query/__pycache__/
+src/__pycache__/
