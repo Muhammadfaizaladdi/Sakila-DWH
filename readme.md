@@ -23,4 +23,4 @@ Project ini bertujuan untuk membuat datawarehouse  onpremise menggukan database 
 ## Workflow
 
 ## Hasil
-![alt text](https://github.com/Muhammadfaizaladdi/Sakila-DWH/main/pictures/DB Schema.jpg?raw=true)
+![alt text](https://github.com/Muhammadfaizaladdi/Sakila-DWH/blob/main/pictures/DB%20Schema.png?raw=true)
