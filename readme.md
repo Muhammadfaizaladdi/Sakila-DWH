@@ -10,15 +10,15 @@ Project ini bertujuan untuk membuat datawarehouse  onpremise menggukan database 
 1. Download repository ke komputer lokal
 2. Buat Environment Python. Dapat menggunakan perintah:
     `python -m venv nama_virt_env`
-3. Install dependensi yang tersimpan di requirements.txt
-4. Buat file sql_params.yml didalam folder query. Variabel yang perlu dimasukkan ke dalam file sql_params:
-    - "host":"nama_host",
-    - "user":"user_login",
-    - "password":"password",
-    - "db_extract":"nama_db_souce",
-    - "db_load":"nama_db_target"
-5. Buat Folder **log_data/**
-6. Jalankan file run.py
+3. Install dependensi yang tersimpan di requirements.txt: `pip install -r requirements.txt`
+4. Buat file sql_params.yml didalam folder query. Variabel yang perlu dimasukkan ke dalam file sql_params: <br>
+    `"host":"nama_host",`<br>
+    `"user":"user_login",`<br>
+    `"password":"password",`<br>
+    `"db_extract":"nama_db_souce",`<br>
+    `"db_load":"nama_db_target"`<br>
+6. Buat Folder **log_data/**
+7. Jalankan file run.py : `python run.py`
 
 ## Workflow
 ![alt text](https://github.com/Muhammadfaizaladdi/Sakila-DWH/blob/main/pictures/workflow.png?raw=true)
