@@ -21,6 +21,6 @@ Project ini bertujuan untuk membuat datawarehouse  onpremise menggukan database 
 6. Jalankan file run.py
 
 ## Workflow
-
+![alt text](https://github.com/Muhammadfaizaladdi/Sakila-DWH/blob/main/pictures/workflow.png?raw=true)
 ## Hasil
 ![alt text](https://github.com/Muhammadfaizaladdi/Sakila-DWH/blob/main/pictures/DB%20Schema.png?raw=true)
